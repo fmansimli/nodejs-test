@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana-datasources.yml:/etc/grafana/grafana.datasources.yml:ro
+
+  prometheus:
+    image: bitnami/prometheus
+    container_name: prometheus
+    environment:
+      - TZ=UTC
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom_data:/bitnami
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - "--path.rootfs=/host"
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    ports:
+      - 9100:9100
+    volumes:
+      - "/:/host:ro,rslave"
+
+volumes:
+  grafana-data:
+  prom_data:
