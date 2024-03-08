@@ -21,8 +21,8 @@ export const downloadFile: RequestHandler = async (req, res, next) => {
     //res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
 
-    res.status(200).send(myFile);
     //res.status(200).sendFile(filePath);
+    res.status(200).send(myFile);
   } catch (error) {
     next(error);
   }
