@@ -6,10 +6,12 @@ class Car {
     Object.assign(this, attrs);
   }
 
-  async drive(): Promise<string> {
-    throw new Error("test error");
-
+  drive(): Promise<string> {
     return Promise.resolve("driving");
+  }
+
+  stop(): Promise<string> {
+    return Promise.reject("an error");
   }
 }
 
@@ -29,11 +31,7 @@ describe("a basic class testing.", () => {
   });
 
   it("should be able to drived", async () => {
-    try {
-      const result = await car.drive();
-      expect(result).toEqual("driving");
-    } catch (error) {
-      expect(false);
-    }
+    const result = await car.drive();
+    expect(result).toEqual("driving");
   });
 });
